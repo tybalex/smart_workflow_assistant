@@ -3,9 +3,51 @@ Auto-discovery of functions from the functions module
 No manual registry needed!
 """
 import inspect
-from typing import get_type_hints, Dict, Any, Callable, Optional, List
+from typing import get_type_hints, Dict, Any, Callable, Optional, List, Union, get_origin, get_args
 from pydantic import create_model, Field
 from functions import FUNCTION_MAP
+
+
+def format_type_name(type_obj) -> str:
+    """Format a type object into a clean string representation"""
+    if type_obj is Any:
+        return "any"
+    
+    # Handle None type
+    if type_obj is type(None):
+        return "null"
+    
+    # Get origin for generic types (List, Dict, Optional, etc.)
+    origin = get_origin(type_obj)
+    
+    if origin is Union:
+        # Handle Optional[T] which is Union[T, None]
+        args = get_args(type_obj)
+        if len(args) == 2 and type(None) in args:
+            # This is Optional[T]
+            other_type = args[0] if args[1] is type(None) else args[1]
+            return format_type_name(other_type)
+        # Other unions
+        return "union[" + ", ".join(format_type_name(arg) for arg in args) + "]"
+    
+    if origin is list or origin is List:
+        args = get_args(type_obj)
+        if args:
+            return f"list[{format_type_name(args[0])}]"
+        return "list"
+    
+    if origin is dict or origin is Dict:
+        args = get_args(type_obj)
+        if args and len(args) == 2:
+            return f"dict[{format_type_name(args[0])}, {format_type_name(args[1])}]"
+        return "dict"
+    
+    # Handle basic types
+    if hasattr(type_obj, '__name__'):
+        return type_obj.__name__
+    
+    # Fallback
+    return str(type_obj).replace("<class '", "").replace("'>", "")
 
 
 def get_function_metadata(func: Callable) -> Dict[str, Any]:
@@ -94,7 +136,7 @@ def get_all_functions() -> List[Dict[str, Any]]:
             'category': info['category'],
             'parameters': {
                 k: {
-                    'type': str(v['type']),
+                    'type': format_type_name(v['type']),
                     'required': v['required'],
                     'default': v['default']
                 }
@@ -117,6 +159,14 @@ def get_functions_by_category(category: str) -> List[Dict[str, Any]]:
             'name': name,
             'description': info['description'],
             'category': info['category'],
+            'parameters': {
+                k: {
+                    'type': format_type_name(v['type']),
+                    'required': v['required'],
+                    'default': v['default']
+                }
+                for k, v in info['parameters'].items()
+            }
         }
         for name, info in DISCOVERED_FUNCTIONS.items()
         if info['category'] == category
@@ -139,7 +189,15 @@ def search_functions(query: str) -> List[Dict[str, Any]]:
             results.append({
                 'name': name,
                 'description': info['description'],
-                'category': info['category']
+                'category': info['category'],
+                'parameters': {
+                    k: {
+                        'type': format_type_name(v['type']),
+                        'required': v['required'],
+                        'default': v['default']
+                    }
+                    for k, v in info['parameters'].items()
+                }
             })
     
     return results

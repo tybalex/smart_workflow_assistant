@@ -10,7 +10,8 @@ from function_discovery import (
     get_function_by_name,
     get_functions_by_category,
     get_all_categories,
-    search_functions
+    search_functions,
+    format_type_name
 )
 
 app = FastAPI(
@@ -54,6 +55,22 @@ async def list_functions():
     }
 
 
+@app.get("/search")
+async def search_functions_endpoint(q: str):
+    """Search functions by name or description"""
+    results = search_functions(q)
+    return {"results": results, "total": len(results), "query": q}
+
+
+@app.get("/functions/category/{category}")
+async def get_category_functions(category: str):
+    """Get all functions in a category"""
+    functions = get_functions_by_category(category)
+    if not functions:
+        raise HTTPException(404, f"No functions found in category '{category}'")
+    return {"functions": functions, "total": len(functions)}
+
+
 @app.get("/functions/{function_name}")
 async def get_function_info(function_name: str):
     """Get detailed information about a specific function"""
@@ -67,7 +84,7 @@ async def get_function_info(function_name: str):
         "category": func_info['category'],
         "parameters": {
             k: {
-                'type': str(v['type']),
+                'type': format_type_name(v['type']),
                 'required': v['required'],
                 'default': v['default']
             }
@@ -80,22 +97,6 @@ async def get_function_info(function_name: str):
 async def list_categories():
     """Get all function categories"""
     return {"categories": get_all_categories()}
-
-
-@app.get("/functions/category/{category}")
-async def get_category_functions(category: str):
-    """Get all functions in a category"""
-    functions = get_functions_by_category(category)
-    if not functions:
-        raise HTTPException(404, f"No functions found in category '{category}'")
-    return {"functions": functions, "total": len(functions)}
-
-
-@app.get("/functions/search")
-async def search_functions_endpoint(q: str):
-    """Search functions by name or description"""
-    results = search_functions(q)
-    return {"results": results, "total": len(results), "query": q}
 
 
 # Auto-generate strongly-typed endpoints for each function
