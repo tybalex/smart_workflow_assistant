@@ -1,0 +1,286 @@
+"""
+Function implementations for the registry.
+All functions are organized by service category.
+"""
+
+# Google Services
+from .google_services import (
+    google_sheets_append,
+    google_sheets_read,
+    google_groups_add_member,
+    gmail_send_email
+)
+
+# Salesforce
+from .salesforce import (
+    salesforce_query,
+    salesforce_create
+)
+
+# Slack
+from .slack import (
+    slack_invite_to_channel,
+    slack_send_message,
+    slack_create_channel
+)
+
+# GitHub
+from .github import (
+    github_create_branch,
+    github_commit_file,
+    github_create_pr
+)
+
+# Email (Mailchimp)
+from .email import (
+    mailchimp_add_subscriber,
+    mailchimp_remove_subscriber
+)
+
+# Storage
+from .storage import (
+    fetch_file,
+    upload_file
+)
+
+# Database
+from .database import (
+    postgres_query,
+    postgres_insert
+)
+
+# HTTP
+from .http import (
+    http_request,
+    send_webhook
+)
+
+# Notion
+from .notion import (
+    notion_create_page,
+    notion_query_database,
+    notion_update_page,
+    notion_create_database
+)
+
+# AWS
+from .aws import (
+    aws_s3_upload,
+    aws_s3_download,
+    aws_lambda_invoke,
+    aws_dynamodb_put,
+    aws_dynamodb_query
+)
+
+# Airtable
+from .airtable import (
+    airtable_create_record,
+    airtable_list_records,
+    airtable_update_record
+)
+
+# Web
+from .web import (
+    web_scrape_page,
+    web_screenshot,
+    web_fill_form
+)
+
+# Payment (Stripe)
+from .payment import (
+    stripe_create_charge,
+    stripe_create_customer
+)
+
+# Communication (Twilio)
+from .communication import (
+    twilio_send_sms,
+    twilio_make_call
+)
+
+# AI (OpenAI)
+from .ai import (
+    openai_chat_completion,
+    openai_embeddings
+)
+
+# Support (Zendesk)
+from .support import (
+    zendesk_create_ticket,
+    zendesk_update_ticket
+)
+
+
+# Function mapping - maps function names to actual function objects
+FUNCTION_MAP = {
+    # Google Services
+    "google_sheets_append": google_sheets_append,
+    "google_sheets_read": google_sheets_read,
+    "google_groups_add_member": google_groups_add_member,
+    "gmail_send_email": gmail_send_email,
+    
+    # Salesforce
+    "salesforce_query": salesforce_query,
+    "salesforce_create": salesforce_create,
+    
+    # Slack
+    "slack_invite_to_channel": slack_invite_to_channel,
+    "slack_send_message": slack_send_message,
+    "slack_create_channel": slack_create_channel,
+    
+    # GitHub
+    "github_create_branch": github_create_branch,
+    "github_commit_file": github_commit_file,
+    "github_create_pr": github_create_pr,
+    
+    # Email
+    "mailchimp_add_subscriber": mailchimp_add_subscriber,
+    "mailchimp_remove_subscriber": mailchimp_remove_subscriber,
+    
+    # Storage
+    "fetch_file": fetch_file,
+    "upload_file": upload_file,
+    
+    # Database
+    "postgres_query": postgres_query,
+    "postgres_insert": postgres_insert,
+    
+    # HTTP
+    "http_request": http_request,
+    "send_webhook": send_webhook,
+    
+    # Notion
+    "notion_create_page": notion_create_page,
+    "notion_query_database": notion_query_database,
+    "notion_update_page": notion_update_page,
+    "notion_create_database": notion_create_database,
+    
+    # AWS
+    "aws_s3_upload": aws_s3_upload,
+    "aws_s3_download": aws_s3_download,
+    "aws_lambda_invoke": aws_lambda_invoke,
+    "aws_dynamodb_put": aws_dynamodb_put,
+    "aws_dynamodb_query": aws_dynamodb_query,
+    
+    # Airtable
+    "airtable_create_record": airtable_create_record,
+    "airtable_list_records": airtable_list_records,
+    "airtable_update_record": airtable_update_record,
+    
+    # Web
+    "web_scrape_page": web_scrape_page,
+    "web_screenshot": web_screenshot,
+    "web_fill_form": web_fill_form,
+    
+    # Payment
+    "stripe_create_charge": stripe_create_charge,
+    "stripe_create_customer": stripe_create_customer,
+    
+    # Communication
+    "twilio_send_sms": twilio_send_sms,
+    "twilio_make_call": twilio_make_call,
+    
+    # AI
+    "openai_chat_completion": openai_chat_completion,
+    "openai_embeddings": openai_embeddings,
+    
+    # Support
+    "zendesk_create_ticket": zendesk_create_ticket,
+    "zendesk_update_ticket": zendesk_update_ticket,
+}
+
+
+def get_function(function_name: str):
+    """
+    Get a function by name
+    
+    Args:
+        function_name: Name of the function to retrieve
+        
+    Returns:
+        The function object or None if not found
+    """
+    return FUNCTION_MAP.get(function_name)
+
+
+__all__ = [
+    # Google Services
+    "google_sheets_append",
+    "google_sheets_read",
+    "google_groups_add_member",
+    "gmail_send_email",
+    
+    # Salesforce
+    "salesforce_query",
+    "salesforce_create",
+    
+    # Slack
+    "slack_invite_to_channel",
+    "slack_send_message",
+    "slack_create_channel",
+    
+    # GitHub
+    "github_create_branch",
+    "github_commit_file",
+    "github_create_pr",
+    
+    # Email
+    "mailchimp_add_subscriber",
+    "mailchimp_remove_subscriber",
+    
+    # Storage
+    "fetch_file",
+    "upload_file",
+    
+    # Database
+    "postgres_query",
+    "postgres_insert",
+    
+    # HTTP
+    "http_request",
+    "send_webhook",
+    
+    # Notion
+    "notion_create_page",
+    "notion_query_database",
+    "notion_update_page",
+    "notion_create_database",
+    
+    # AWS
+    "aws_s3_upload",
+    "aws_s3_download",
+    "aws_lambda_invoke",
+    "aws_dynamodb_put",
+    "aws_dynamodb_query",
+    
+    # Airtable
+    "airtable_create_record",
+    "airtable_list_records",
+    "airtable_update_record",
+    
+    # Web
+    "web_scrape_page",
+    "web_screenshot",
+    "web_fill_form",
+    
+    # Payment
+    "stripe_create_charge",
+    "stripe_create_customer",
+    
+    # Communication
+    "twilio_send_sms",
+    "twilio_make_call",
+    
+    # AI
+    "openai_chat_completion",
+    "openai_embeddings",
+    
+    # Support
+    "zendesk_create_ticket",
+    "zendesk_update_ticket",
+    
+    # Utilities
+    "FUNCTION_MAP",
+    "get_function",
+]
+
