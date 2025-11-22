@@ -10,22 +10,37 @@ A FastAPI-based function call registry system that provides a centralized catalo
 - **Categories**: Google, Salesforce, Slack, GitHub, Notion, AWS, Stripe, and more
 - **Search & Filter**: Find functions by name, description, category, or required credentials
 
+## Prerequisites
+
+- Python 3.13+
+- [uv](https://github.com/astral-sh/uv) - Fast Python package installer
+
+Install uv:
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
 ## Installation
 
 ```bash
-pip install -r requirements.txt
+# Install dependencies with uv
+uv sync
+
+# Or install manually
+uv pip install -e .
 ```
 
 ## Running the Server
 
 ```bash
-python main.py
+# Using Python directly
+uv run python main.py
 ```
 
 Or using uvicorn directly:
 
 ```bash
-uvicorn main:app --host 0.0.0.0 --port 9999 --reload
+uv run uvicorn main:app --host 0.0.0.0 --port 9999 --reload
 ```
 
 The API will be available at `http://localhost:9999`
@@ -131,30 +146,32 @@ Examples:
 
 ```
 example_registry/
-├── main.py              # FastAPI application
-├── models.py            # Pydantic models
-├── registry.py          # Function registry definitions
-├── requirements.txt     # Python dependencies
-├── test_functions.py    # Test script for functions
-├── functions/           # Function implementations
-│   ├── __init__.py      # Exports all functions
-│   ├── google_services.py
-│   ├── salesforce.py
-│   ├── slack.py
-│   ├── github.py
-│   ├── email.py
-│   ├── storage.py
-│   ├── database.py
-│   ├── http.py
-│   ├── notion.py
-│   ├── aws.py
-│   ├── airtable.py
-│   ├── web.py
-│   ├── payment.py
-│   ├── communication.py
-│   ├── ai.py
-│   └── support.py
-└── README.md           # This file
+├── main.py                  # FastAPI application
+├── models.py                # Pydantic models
+├── function_discovery.py    # Auto-discovery and endpoint generation
+├── pyproject.toml           # Project configuration and dependencies
+├── .python-version          # Python version (3.13)
+├── functions/               # Function implementations
+│   ├── __init__.py          # Exports all functions
+│   ├── google_services.py   # Google Sheets, Gmail, Groups
+│   ├── salesforce.py        # Salesforce CRM
+│   ├── slack.py             # Slack messaging
+│   ├── github.py            # GitHub repositories
+│   ├── mailing_list.py      # Mailing list management
+│   ├── member_desk.py       # Member Desk invitations
+│   ├── email.py             # Email services
+│   ├── storage.py           # Cloud storage
+│   ├── database.py          # Database operations
+│   ├── http.py              # HTTP requests
+│   ├── notion.py            # Notion workspace
+│   ├── aws.py               # AWS services
+│   ├── airtable.py          # Airtable database
+│   ├── web.py               # Web scraping
+│   ├── payment.py           # Payment processing
+│   ├── communication.py     # SMS/voice
+│   ├── ai.py                # AI services
+│   └── support.py           # Support ticketing
+└── README.md                # This file
 ```
 
 ## API Documentation
